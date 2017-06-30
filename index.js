@@ -19,24 +19,36 @@ const f = (content, ...changes) => {
     }, content);
 };
 
-const replace = (path, string, pattern, replacement) => {
+const find = (arr, str) => {
+    return arr.indexOf(str) !== -1;
+};
+
+const replace = (path, string, pattern, replacement, callback) => {
+    const logs = [];
     if (string.match(pattern)) {
-        console.log(f(path, 'bold'));
+        logs.push(f(path, 'bold'));
         string = string.replace(pattern, (match) => {
             const newValue = match.replace(pattern, replacement);
-            console.log('  ', f(match, 'bold', 'red'), '→', f(newValue, 'bold', 'green'));
+            logs.push(['  ', f(match, 'bold', 'red'), '→', f(newValue, 'bold', 'green')]);
             return newValue;
         });
-        console.log('');
+        logs.push('');
     }
+    callback(logs);
     return string;
 };
 
-const handler = (glob, pattern, replacement, isPreview) => {
+const handler = (glob, pattern, replacement, isPreview, isSilent) => {
     console.log('');
     globby.sync(glob).forEach((path) => {
         const contents = fs.readFileSync(path, 'utf-8');
-        const newContents = replace(path, contents, pattern, replacement);
+        const newContents = replace(path, contents, pattern, replacement, (logs) => {
+            if (!isSilent) {
+                logs.forEach((line) => {
+                    console.log([].concat(line).join(' '));
+                });
+            }
+        });
         if (!isPreview) {
             fs.writeFileSync(path, newContents);
         }
@@ -45,14 +57,15 @@ const handler = (glob, pattern, replacement, isPreview) => {
 
 const cli = (args) => {
     if (args.length < 3) {
-        console.log(f('\n  usage: emn <glob> <pattern> <replacement> [--preview]\n', 'bold', 'red'));
+        console.log(f('\n  usage: emn <glob> <pattern> <replacement> [--preview] [--silent]\n', 'bold', 'red'));
         return;
     }
-    const [glob, pattern, replacement, preview] = args;
+    const [glob, pattern, replacement, ...options] = args;
     const [, body, flags] = pattern.match(/^\/([^]*)\/(\w+)?$/);
     const formattedReplacement = replacement.replace(/\\(\d+)/g, '$$1');
-    const isPreview = (preview === '--preview') || (preview === '-p');
-    handler(glob, new RegExp(body, flags), formattedReplacement, isPreview);
+    const isPreview = find(options, '--preview') || find(options, '-p');
+    const isSilent = find(options, '--silent') || find(options, '-s');
+    handler(glob, new RegExp(body, flags), formattedReplacement, isPreview, isSilent);
 };
 
 if (wasRequired) {
