@@ -1,0 +1,26 @@
+{
+  "name": "emn",
+  "version": "0.0.0",
+  "description": "command line string replacement",
+  "main": "index.js",
+  "bin": "node index",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/g-harel/emn.git"
+  },
+  "author": "g-harel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/g-harel/emn/issues"
+  },
+  "homepage": "https://github.com/g-harel/emn#readme",
+  "devDependencies": {
+    "jest": "^20.0.4"
+  },
+  "dependencies": {
+    "globby": "^6.1.0"
+  }
+}
