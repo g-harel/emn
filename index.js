@@ -69,13 +69,10 @@ const cli = (args) => {
 };
 
 if (wasRequired) {
-    const emn = (glob, pattern, replacement) => {
-        handler(glob, pattern, replacement, false);
+    module.exports = (glob, pattern, replacement, options = {}) => {
+        const {isPreview, isSilent} = options;
+        handler(glob, pattern, replacement, isPreview, isSilent);
     };
-    emn.preview = (glob, pattern, replacement) => {
-        handler(glob, pattern, replacement, true);
-    };
-    module.exports = emn;
 } else {
     cli(process.argv.slice(2));
 };
