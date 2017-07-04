@@ -1,9 +1,18 @@
 # emn
-command line string replacement
+
+> Command line string replacement.
+
+Match files using glob patterns and replace their contents using the `string.replace` function.
+
+# Install
+
+````
+$ npm install --save-dev emn
+````
 
 # Usage
 
-`### cli`
+### `cli`
 
 ````shell
 $ emn <glob> <pattern> <replacement> [--preview] [--silent]
@@ -14,11 +23,15 @@ $ emn <glob> <pattern> <replacement> [--preview] [--silent]
   # --silent: prevemt any logging to the console
 ````
 
+When using the cli, it is possible to use `\1` instead of `$1` to replace using capture groups.
+
+Make sure to also include the full regex pattern (delimiting slashes + optional flags)
+
 ````shell
 $ emn "src/**/*.js" "/var (\w+)/gi" "let \1" --preview
 ````
 
-`### require`
+### `require`
 
 ````javascript
 const enm = require('enm');
