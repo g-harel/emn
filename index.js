@@ -63,7 +63,12 @@ const cli = (args) => {
         return;
     }
     const [glob, pattern, replacement, ...options] = args;
-    const [, body, flags] = pattern.match(/^\/([^]*)\/(\w+)?$/);
+    const regexPattern = pattern.match(/^\/([^]*)\/(\w+)?$/);
+    if (regexPattern === null) {
+        console.log(f(`\n  Invalid regex expression: ${pattern}\n`, 'bold', 'red'));
+        return;
+    }
+    const [, body, flags] = regexPattern;
     const formattedReplacement = replacement.replace(/\\(\d+)/g, '$$1');
     const isPreview = find(options, '--preview') || find(options, '-p');
     const isSilent = find(options, '--silent') || find(options, '-s');
