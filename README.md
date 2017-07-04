@@ -28,7 +28,7 @@ When using the cli, it is possible to use `\1` instead of `$1` to replace using 
 Make sure to also include the full regex pattern (delimiting slashes + optional flags)
 
 ````shell
-$ emn "src/**/*.js" "/var (\w+)/gi" "let \1" --preview
+$ emn 'src/**/*.js' '/var (\w+)/gi' 'let \1' --preview
 ````
 
 ### `require`
